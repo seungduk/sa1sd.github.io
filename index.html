@@ -1,21 +1,131 @@
 <html lang="ko-KR">
 <head>
-  <meta content="width=1536" name="viewport">
+  <meta content="width=1024, user-scalable=no" name="viewport">
+  <link href="https://fonts.googleapis.com/css?family=Nanum+Gothic" rel="stylesheet">
   <title>Wedding Invitation</title>
   <style>
     body {
+      background: #100604;
+      color: white;
+      font: 24px 'Nanum Gothic', sans-serif;
+      letter-spacing: 5px;
       margin: 0;
     }
 
-    .main {
+    #main-image {
       background: url(main.jpg);
       height: 1536px;
       width: 1024px;
     }
+
+    #gradient {
+      background: linear-gradient(rgba(16, 6, 4, 1), rgba(16, 6, 4, 0.5));
+      height: 100%;
+      width: 100%;
+    }
+
+    #flip {
+      background: url(main.jpg) bottom;
+      height: 320px;
+      transform: scaleY(-1);
+    }
+
+    #text-container {
+      margin: 32px 0;
+    }
+
+    .text-line {
+      padding: 24px 0;
+      text-align: center;
+    }
   </style>
+  <script
+    src="https://code.jquery.com/jquery-1.12.4.min.js"
+    integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
+    crossorigin="anonymous"></script>
+  <script>
+    // NOTE: ES6 is not used for compatibility.
+    var text = [
+      '봄향기 가득한 길',
+      '저희 두 사람은 이제 믿음과 사랑으로',
+      '서로의 벗이 되어 한 길을 가고자 합니다',
+      '가까이서 저희들의 출발을 지켜봐 주시면',
+      '더 없는 기쁨으로 간직하겠습니다.',
+    ];
+
+    function animateItems(items) {
+      for (var i = 0; i < items.length; ++i) {
+        items[i].hide();
+        items[i].fadeIn(Math.floor(Math.random() * 5000));
+      }
+    }
+
+    function addText(message) {
+      var container = $('#text-container');
+      var characterList = [];
+      for (var i = 0; i < message.length; ++i) {
+        var line = $('<div class="text-line">').appendTo(container);
+        for (var j = 0; j < message[i].length; ++j) {
+          characterList.push(
+              $('<span>' + message[i].charAt(j) + '</span>').appendTo(line));
+        }
+      }
+      return characterList;
+    }
+
+    function onLoad() {
+      var letters = addText(text);
+      $('#text-container').css('visibility', 'hidden');
+      var threshold = $('#main-image').height() + $('#flip').height()
+          - window.innerHeight + $('#text-container').height() / 2;
+      $(window).scroll(function() {
+        if ($(window).scrollTop() < threshold) {
+          return;
+        }
+        $(window).off('scroll');
+        $('#text-container').css('visibility', '');
+        animateItems(letters);
+      });
+    }
+
+    $(document).ready(onLoad);
+  </script>
 </head>
 <body>
-  <div class="main">
+  <div id="main-image">
   </div>
+  <div id="flip">
+    <div id="gradient"></div>
+  </div>
+  <div id="text-container"></div>
+  <div>
+    <div>
+      <div>
+        <div>김환득</div>
+        <div>문양여</div>
+      </div>
+      의 장남
+      <div>승덕</div>
+    </div>
+    <div>
+      <div>
+        <div>황원기</div>
+        <div>문양여</div>
+      </div>
+      의 장녀
+      <div>신애</div>
+    </div>
+  </div>
+  <div>일시</div>
+  <div>2018년 4월 1일 일요일 오후 1시</div>
+  <div>장소</div>
+  <div>안동 그랜드호텔 2F 그랜드볼룸홀</div>
+  <div>&lt; 찾아오시는 길 &gt;</div>
+  <div>전세버스 안내</div>
+  <div>버스 이용시</div>
+  <div>안동버스터미널 문화관광단지: 버스 3번 (30분 간격)</div>
+  <div>안동버스터미널 안동역: 버스 1번, 2번 (10분 간격)</div>
+  <div>안동역 문화관광단지: 버스 3번 (30분 간격)</div>
+  <div>경상북도 안동시 관광단지로 346-84 안동 그랜드호텔</div>
 </body>
 </html>
